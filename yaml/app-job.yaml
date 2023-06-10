@@ -19,6 +19,3 @@ spec:
           mountPath: /data/input
       restartPolicy: Never
       backoffLimit: 0
-
-# Create Job with apiVersion "batch/v1" and name is app-job-rsync. Must be volumes section with name "data-input" and mounts a Google Compute Engine persistent disk with popular Linux filesystem. Named this disk as "glow-data-disk-200". Use image google/cloud-sdk:275.0.0-alpine with name "init" and add some command: first is /bin/sh, second - -c, third - gsutil -m rsync -dr gs://glow-sportradar/ /data/input. Add volume mounts with name "data-input" and path "/data/input. The system should not reboot. Limit of backoff is 0.
-

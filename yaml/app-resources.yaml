@@ -32,9 +32,3 @@ spec:
         periodSeconds: 2
         failureThreshold: 3
         successThreshold: 1
-
-
-# create pod with metadata's name app-resource. Then use image gcr.io/kuar-demo/kuard-amd64:1 with name app. In livenessProbe section use path /healthy and port 8080, it should wait 5 seconds before performing the first probe. Timeout use 1 second and should perform a liveness probe every 10 seconds. After 3 consecutive failed results needed to switch probe status to “Failure”. In readinessProbe section use path /ready and port 8080. it should wait 0 seconds before performing the first probe and perform a readiness probe every 2 seconds. After 3 consecutive failed results needed to switch probe status to “Failure” and after 1 consecutive successful results needed to switch probe status to “Success”. Use containerPort 8080, name of port by http. Request resources are 100m of cpu and 128Mi of memory. Limits recources are 100m of cpu and 256Mi of memory.
-
-# This will create the pod with the specified configuration. The container named "app" will use the gcr.io/kuar-demo/kuard-amd64:1 image and listen on port 8080. The liveness probe will perform an HTTP GET request to the path "/healthy" on port 8080 after an initial delay of 5 seconds, with a timeout of 1 second. It will be executed every 10 seconds, and after 3 consecutive failures, the probe status will switch to "Failure". The readiness probe will perform an HTTP GET request to the path "/ready" on port 8080 with an initial delay of 0 seconds. It will be executed every 2 seconds, and after 3 consecutive failures, the probe status will switch to "Failure". After 1 consecutive successful result, the probe status will switch to "Success". The container has resource requests of 100m CPU and 128Mi memory, and resource limits of 100m CPU and 256Mi memory.
-

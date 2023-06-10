@@ -13,6 +13,3 @@ spec:
             image: bash
             command: ["echo", "Hello world"]
           restartPolicy: OnFailure
-
-# Create CronJob with name "app-cronjob" and apiVersion "batch/v1beta1". String of schedule is "*/5 * * * *". Use image bash with name "hello" and add command ["echo",  "Hello world"]. Add restart policy when system on failure.
-

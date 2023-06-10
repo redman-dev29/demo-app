@@ -18,9 +18,3 @@ spec:
       periodSeconds: 10
       timeoutSeconds: 1
       failureThreshold: 3
-
-# create pod with metadata's name app-livenessprob and namespace demo. Then use image gcr.io/devops-project-388318/demo:v1.0.0 with name app. In livenessProbe section use path / and port 8080, it should wait 5 seconds before performing the first probe. Timeout use 1 second and should perform a liveness probe every 10 seconds. After 3 consecutive failed results needed to switch probe status to “Failure”. use containerPort 8080, name of port by http
-
-#This will create a pod named "app-livenessprob" in the "demo" namespace. The pod will run a container named "app" using the specified image gcr.io/devops-project-388318/demo:v1.0.0. The container will expose port 8080 with the name "http".
-
-#The pod includes a liveness probe that performs an HTTP GET request to the path "/" on port 8080. It will wait for 5 seconds before performing the first probe, and subsequently, it will perform a liveness probe every 10 seconds. If the probe fails three consecutive times, the pod's status will be set to "Failure".

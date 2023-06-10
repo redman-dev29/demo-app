@@ -12,6 +12,3 @@ spec:
     ports:
     - name: http
       containerPort: 8080
-
-# create pod with name app, labels app and run are demo, use image gcr.io/devops-project-388318/demo:v1.0.0 and use containerPort 8080, name of port by http
-# This will create a pod named "app" with the labels "app=demo" and "run=demo". The pod will run a container named "app-container" using the specified image gcr.io/devops-project-388318/demo:v1.0.0. The container will expose port 8080 with the name "http".
