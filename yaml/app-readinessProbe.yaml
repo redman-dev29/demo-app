@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-readinessprob
+spec:
+  containers:
+  - name: app
+    image: gcr.io/devops-project-388318/demo:v1.0.0
+    ports:
+    - name: http
+      containerPort: 8080
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 8080
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      failureThreshold: 3
+
+# create pod with metadata's name app-readinessprob. Then use image gcr.io/devops-project-388318/demo:v1.0.0 with name app. In livenessProbe section use path / and port 8080, it should wait 5 seconds before performing the first probe. Timeout use 1 second and should perform a liveness probe every 10 seconds. After 3 consecutive failed results needed to switch probe status to “Failure”. use containerPort 8080, name of port by http. In readinessProbe section use path /ready and port 8080. it should wait 0 seconds before performing the first probe and perform a readiness probe every 2 seconds. After 3 consecutive failed results needed to switch probe status to “Failure” and after 1 consecutive successful results needed to switch probe status to “Success”.
+
+# This will create a pod named "app-readinessprob" with a container named "app". The container will use the specified image gcr.io/devops-project-388318/demo:v1.0.0 and expose port 8080 with the name "http".
+
+# The pod includes a liveness probe that performs an HTTP GET request to the path "/" on port 8080. It will wait for 5 seconds before performing the first probe and subsequently perform a liveness probe every 10 seconds. If the probe fails three consecutive times, the pod's status will be set to "Failure".
+
+# Additionally, the pod includes a readiness probe that performs an HTTP GET request to the path "/ready" on port 8080. It will wait for 0 seconds before performing the first probe and subsequently perform a readiness probe every 2 seconds. If the probe fails three consecutive times, the pod's status will be set to "Failure". If the probe succeeds once, the pod's status will be set to "Success".
