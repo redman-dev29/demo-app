@@ -1,0 +1,122 @@
+# Source: helm/templates/api-deploy.yaml
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: new-version-api
+  namespace: default
+  labels:
+    version: v4
+spec:
+  selector:
+    matchLabels:
+      app: new-version-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: new-version-api
+        version: v4
+    spec:
+      containers:
+      - name: api
+        image: denvasyliev/k8sdiy:build-802e329
+        command:
+          - ./app
+          - "-role"
+          - "api"
+          - "-server"
+          - nats-cluster
+        imagePullPolicy: Always
+        env:
+          - name: APP_BACKEND
+            value: "iscii"
+          - name: APP_DATASTORE
+            value: "data"
+          - name: APP_DB
+            value: "root@tcp(db:3306)/demo"
+          - name: APP_CACHE
+            value: "cache"
+          - name: APP_LICENSE
+            valueFrom:
+              secretKeyRef:
+                name: new-version-secret
+                key: license
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080
+          name: http
+        securityContext:
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readinez
+            port: 8080
+          initialDelaySeconds: 0
+          periodSeconds: 3
+      volumes:
+        - name: data
+          configMap:
+            name: new-version-configmap
+---
+# Source: helm/templates/api-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: new-version-api
+  namespace: default
+  labels:
+    app: api
+    version: v4
+  annotations:
+    
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  new-version-api-api
+      prefix: /api/
+      service: new-version-api
+      headers:
+        x-mode: MG5seTRxYQ==
+      weight: 5
+       
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: new-version-api
+---
+# Source: helm/templates/app-configmap.yaml
+apiVersion: v1
+data:
+  key: demo
+kind: ConfigMap
+metadata:
+  name: new-version-configmap
+  namespace: default
+  labels:
+    version: v4
+---
+# Source: helm/templates/secret.yaml
+apiVersion: v1
+data:
+  license: MTIzNDU=
+kind: Secret
+metadata:
+  name: new-version-secret
+  namespace: default
+  labels:
+    version: v4
